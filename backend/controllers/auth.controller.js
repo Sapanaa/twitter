@@ -71,6 +71,9 @@ export const logout = async (req, res) => {
     export const login = async (req, res) => {
         try{
             const {username,password} = req.body;
+            if (!username || !password) {
+                return res.status(400).json({ error: "Username and password are required" });
+            }
             const user = await User.findOne({username});
            const isPasswordCorrrect = await bcrypt.compare(password, user.password);
 
