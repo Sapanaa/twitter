@@ -69,12 +69,37 @@ export const logout = async (req, res) => {
     }
 
     export const login = async (req, res) => {
-        res.json({data:"This is logout page"});
+        try{
+            const {username,password} = req.body;
+            const user = await User.findOne({username});
+           const isPasswordCorrrect = await bcrypt.compare(password, user.password);
+
+        if(!user || !isPasswordCorrrect){
+            return res.status(400).json({error:"User not found"});
+        }
+        generateTokenAndSetCookie(user._id, res);
+            res.status(201).json({
+                _id : user._id,
+                fullname : user.fullname,
+                username : user.username,  
+                email : user.email,
+                followers : user.followers,
+                following : user.following,
+                profileImage : user.profileImage,
+                coverImage : user.coverImage,
+               });
+        
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({error:"Internal server error"});
+    }
+        
     }
 
     export const getMe = async (req, res) => {
         try {
-            const user = await User.findById(req.user._id);
+            const user = await User.findById(req.user._id).select("-password");
             res.status(200).json(user);
         }
         catch (error) {
