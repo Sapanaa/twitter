@@ -10,6 +10,8 @@ import { MdDriveFileRenameOutline } from "react-icons/md";
 import { useMutation} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 const SignupPage = () => {
+
+    
 	const [formData, setFormData] = useState({
 		email: "",
 		username: "",
