@@ -5,7 +5,7 @@ import Posts from "../../components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 
-import { POSTS } from "../../utils/db/dummy";
+//import { POSTS } from "../../utils/db/dummy";
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -18,12 +18,12 @@ import useFollow from "../../hooks/useFollow";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
 const ProfilePage = () => {
-	const [coverImg, setCoverImg] = useState(null);
-	const [profileImg, setProfileImg] = useState(null);
+	const [coverImage, setcoverImage] = useState(null);
+	const [profileImage, setprofileImage] = useState(null);
 	const [feedType, setFeedType] = useState("posts");
 
-	const coverImgRef = useRef(null);
-	const profileImgRef = useRef(null);
+	const coverImageRef = useRef(null);
+	const profileImageRef = useRef(null);
 
 	const { username } = useParams();
 
@@ -51,6 +51,8 @@ const ProfilePage = () => {
 		},
 	});
 
+	
+
 	const { isUpdatingProfile, updateProfile } = useUpdateUserProfile();
 
 	const isMyProfile = authUser._id === user?._id;
@@ -62,8 +64,8 @@ const ProfilePage = () => {
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
-				state === "coverImg" && setCoverImg(reader.result);
-				state === "profileImg" && setProfileImg(reader.result);
+				state === "coverImage" && setcoverImage(reader.result);
+				state === "profileImage" && setprofileImage(reader.result);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -87,21 +89,21 @@ const ProfilePage = () => {
 									<FaArrowLeft className='w-4 h-4' />
 								</Link>
 								<div className='flex flex-col'>
-									<p className='font-bold text-lg'>{user?.fullName}</p>
-									<span className='text-sm text-slate-500'>{POSTS?.length} posts</span>
+									<p className='font-bold text-lg'>{user?.fullname}</p>
+									<span className='text-sm text-slate-500'>{user?.length} posts</span>
 								</div>
 							</div>
 							{/* COVER IMG */}
 							<div className='relative group/cover'>
 								<img
-									src={coverImg || user?.coverImg || "/cover.png"}
+									src={coverImage || user?.coverImage|| "/cover.png"}
 									className='h-52 w-full object-cover'
 									alt='cover image'
 								/>
 								{isMyProfile && (
 									<div
 										className='absolute top-2 right-2 rounded-full p-2 bg-gray-800 bg-opacity-75 cursor-pointer opacity-0 group-hover/cover:opacity-100 transition duration-200'
-										onClick={() => coverImgRef.current.click()}
+										onClick={() => coverImageRef.current.click()}
 									>
 										<MdEdit className='w-5 h-5 text-white' />
 									</div>
@@ -111,25 +113,25 @@ const ProfilePage = () => {
 									type='file'
 									hidden
 									accept='image/*'
-									ref={coverImgRef}
-									onChange={(e) => handleImgChange(e, "coverImg")}
+									ref={coverImageRef}
+									onChange={(e) => handleImgChange(e, "coverImage")}
 								/>
 								<input
 									type='file'
 									hidden
 									accept='image/*'
-									ref={profileImgRef}
-									onChange={(e) => handleImgChange(e, "profileImg")}
+									ref={profileImageRef}
+									onChange={(e) => handleImgChange(e, "profileImage")}
 								/>
 								{/* USER AVATAR */}
 								<div className='avatar absolute -bottom-16 left-4'>
 									<div className='w-32 rounded-full relative group/avatar'>
-										<img src={profileImg || user?.profileImg || "/avatar-placeholder.png"} />
+										<img src={profileImage || user?.profileImage || "/avatar-placeholder.png"} />
 										<div className='absolute top-5 right-3 p-1 bg-primary rounded-full group-hover/avatar:opacity-100 opacity-0 cursor-pointer'>
 											{isMyProfile && (
 												<MdEdit
 													className='w-4 h-4 text-white'
-													onClick={() => profileImgRef.current.click()}
+													onClick={() => profileImageRef.current.click()}
 												/>
 											)}
 										</div>
@@ -148,13 +150,13 @@ const ProfilePage = () => {
 										{!isPending && !amIFollowing && "Follow"}
 									</button>
 								)}
-								{(coverImg || profileImg) && (
+								{(coverImage || profileImage) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
 										onClick={async () => {
-											await updateProfile({ coverImg, profileImg });
-											setProfileImg(null);
-											setCoverImg(null);
+											await updateProfile({ coverImage, profileImage });
+											setprofileImage(null);
+											setcoverImage(null);
 										}}
 									>
 										{isUpdatingProfile ? "Updating..." : "Update"}
@@ -164,7 +166,7 @@ const ProfilePage = () => {
 
 							<div className='flex flex-col gap-4 mt-14 px-4'>
 								<div className='flex flex-col'>
-									<span className='font-bold text-lg'>{user?.fullName}</span>
+									<span className='font-bold text-lg'>{user?.fullname}</span>
 									<span className='text-sm text-slate-500'>@{user?.username}</span>
 									<span className='text-sm my-1'>{user?.bio}</span>
 								</div>
