@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 
 import userRoutes from './routes/user.route.js'
 import postRoutes from './routes/post.route.js'
+import notificationRoutes from './routes/notification.route.js'
 dotenv.config()
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -24,6 +25,7 @@ app.use(cookieParser())
 app.use("/api/auth", authRoutes);  //localhost/api/auth
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
     connectDB()
