@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/me", protectRoute, getMe);
 router.post("/signup", signup) //localhost/api/auth/signup import it from the controller to make it easy
-
 router.post("/login",login)
 router.post("/logout", logout)
 

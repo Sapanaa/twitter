@@ -2,53 +2,53 @@ import { CiImageOn } from "react-icons/ci";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
 const CreatePost = () => {
 	const [text, setText] = useState("");
 	const [img, setImg] = useState(null);
-
 	const imgRef = useRef(null);
 
-
-	const {data: authUser} = useQuery({
-		queryKey: ['authUser']
-	})
+	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
 
-	const {mutate: createPost, isPending, isError} = useMutation({
-		mutationFn: async () => {
+	const {
+		mutate: createPost,
+		isPending,
+		isError,
+		error,
+	} = useMutation({
+		mutationFn: async ({ text, img }) => {
 			try {
-				const res = await fetch("api/posts/create", {
+				const res = await fetch("/api/posts/create", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({
-						text,
-						img,
-					}),
+					body: JSON.stringify({ text, img }),
 				});
 				const data = await res.json();
+				if (!res.ok) {
+					throw new Error(data.error || "Something went wrong");
+				}
 				return data;
 			} catch (error) {
 				throw new Error(error);
 			}
 		},
+
 		onSuccess: () => {
 			setText("");
 			setImg(null);
 			toast.success("Post created successfully");
-			queryClient.invalidateQueries({queryKey: ['posts']});
-			
-		}
-		})
+			queryClient.invalidateQueries({ queryKey: ["posts"] });
+		},
+	});
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		createPost();
+		createPost({ text, img });
 	};
 
 	const handleImgChange = (e) => {
@@ -97,12 +97,12 @@ const CreatePost = () => {
 						/>
 						<BsEmojiSmileFill className='fill-primary w-5 h-5 cursor-pointer' />
 					</div>
-					<input type='file' hidden ref={imgRef} onChange={handleImgChange} />
+					<input type='file' accept='image/*' hidden ref={imgRef} onChange={handleImgChange} />
 					<button className='btn btn-primary rounded-full btn-sm text-white px-4'>
 						{isPending ? "Posting..." : "Post"}
 					</button>
 				</div>
-				{isError && <div className='text-red-500'>Something went wrong</div>}
+				{isError && <div className='text-red-500'>{error.message}</div>}
 			</form>
 		</div>
 	);
