@@ -118,7 +118,7 @@ const ProfilePage = () => {
 										Follow
 									</button>
 								)}
-								{(coverImg || profileImg) && (
+								{  (coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
 										onClick={() => alert("Profile updated successfully")}
