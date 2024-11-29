@@ -3,30 +3,35 @@ import Post from "../models/post.model.js";
 import User from "../models/user.models.js";
 import { v2 as cloudinary } from "cloudinary";
 import Notification from "../models/notification.model.js";
+
 export const createPost = async (req, res) => {
-    const {text} = req.body;
-    const {img} = req.body;
+    const { text } = req.body;
+    let { img } = req.body; // Use 'let' for img since it may be reassigned
     const userId = req.user._id;
+
     const user = await User.findById(userId);
-    if(!user) return res.status(404).json({error:"User not found"});
-    if(!text && !img) return res.status(400).json({error:"Text or image is required"});
-    if(img){
-        const imageUpp = cloudinary.uploader.upload(img);
-        img = await imageUpp.secure_url;
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    if (!text && !img) return res.status(400).json({ error: "Text or image is required" });
+
+    if (img) {
+        const imageUpp = await cloudinary.uploader.upload(img); // Await the upload process
+        img = imageUpp.secure_url; // Assign the secure_url to img
     }
-    try{
+
+    try {
         const newPost = new Post({
             user: userId,
             text,
-            img
+            img,
         });
+
         await newPost.save();
-        res.status(201).json(newPost)
+        res.status(201).json(newPost);
+    } catch (error) {
+        res.status(500).json({ error: "Cannot create post server error" });
     }
-    catch(error){   
-        res.status(500).json({error:"Cannot create post server error"});
-    }
-}
+};
 
 export const deletePost = async (req, res) => {
     try{
