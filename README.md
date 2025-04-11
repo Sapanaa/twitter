@@ -1,6 +1,6 @@
 # 🐦 Twitter Clone
 
-A full-stack Twitter Clone application built with **React** for the frontend and **Node.js/Express** for the backend. This project replicates the core features of Twitter, such as user authentication, post creation, notifications, and media handling using Cloudinary.
+A full-stack Twitter Clone application built with **React** for the frontend and **Node.js/Express** for the backend. This project replicates the core features of Twitter, such as user authentication, post creation, notifications, and media handling using **Cloudinary**.
 
 ## 🚀 Features
 
@@ -120,8 +120,19 @@ cd twitter
 
 - **GET** `/api/notifications`: Get notifications for the logged-in user
 
+### 📱 Responsiveness
+This application is fully responsive and works seamlessly on a wide range of devices including:
+
+**Desktop**
+
+**Tablets**
+
+**Smartphones (both iOS and Android)**
+
+The app's design adapts automatically to different screen sizes, providing an optimal user experience across all device
+
 ## ✨ Screenshots
 
 Here are some screenshots from the project:
-
+**Login page**
 ![Alt text](/ss/login.png)
