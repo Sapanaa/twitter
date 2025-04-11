@@ -120,4 +120,8 @@ cd twitter
 
 - **GET** `/api/notifications`: Get notifications for the logged-in user
 
+## ✨ Screenshots
 
+Here are some screenshots from the project:
+
+![Alt text](/ss/login.png)
